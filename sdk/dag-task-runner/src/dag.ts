@@ -27,7 +27,7 @@ const COMPLEXITY_KEYS = ["HIGH", "MED", "LOW"] as const satisfies readonly Compl
 export const DEFAULT_MODEL_MAP: ModelMap = {
   HIGH: "gpt-5.3-codex",
   MED: "composer-2",
-  LOW: "composer-2-fast",
+  LOW: "auto-low",
 };
 
 export function parseDAG(raw: unknown): DAG {
@@ -213,5 +213,5 @@ export function createModelResolver(overrides: ModelMapOverride = {}): (c: Compl
       throw new Error(`Unknown complexity: ${c}`);
     }
     return models[c];
-  }
+  };
 }

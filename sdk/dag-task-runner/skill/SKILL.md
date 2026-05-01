@@ -7,7 +7,7 @@ description: Decompose a user's task into a DAG of subtasks and execute them wit
 
 Decomposes a user-described task into a JSON DAG, then runs each node as a Cursor SDK local subagent (with parents' outputs stitched into the child's prompt). Live DAG state — including each running subagent's streaming output — is rendered into a `.canvas.tsx` that the runner rewrites on every status transition; the IDE hot-recompiles so the user sees subagents move through `PENDING -> RUNNING -> FINISHED/ERROR` in real time.
 
-This skill assumes the runner is installed at `${DAG_RUNNER_DIR}` (default: `~/.cursor/skills/dag-task-runner/scripts`). Set `DAG_RUNNER_DIR` to override — useful when you've installed the cookbook example at a different location.
+This skill assumes the runner is installed at `${DAG_RUNNER_DIR}` (default: `~/.cursor/skills/dag-task-runner/scripts`). The installed runner entry point is `$RUNNER_DIR/run_dag.ts`. Set `DAG_RUNNER_DIR` to override — useful when you've installed the cookbook example at a different location.
 
 ## When to use
 
@@ -31,7 +31,7 @@ You (the parent agent) author the DAG inline using your understanding of the use
   "models": {
     "HIGH": "gpt-5.3-codex",
     "MED": "composer-2",
-    "LOW": "composer-2-fast"
+    "LOW": "auto-low"
   },
   "tasks": [
     {
@@ -84,7 +84,7 @@ JSON
   (cd "$RUNNER_DIR" && (pnpm install --silent || npm install --silent))
 
 # 3. Generate the initial all-PENDING canvas (no CURSOR_API_KEY needed)
-"$RUNNER_DIR/node_modules/.bin/tsx" "$RUNNER_DIR/src/run_dag.ts" \
+"$RUNNER_DIR/node_modules/.bin/tsx" "$RUNNER_DIR/run_dag.ts" \
   --init-only \
   --dag /tmp/dag-<slug>.json \
   --canvas-path "$CANVAS_PATH"
@@ -117,7 +117,7 @@ Ensure `CURSOR_API_KEY` is set (the runner fails fast if missing), then launch:
 ```bash
 [ -n "$CURSOR_API_KEY" ] || { [ -f .env ] && set -a && source .env && set +a; }
 
-"$RUNNER_DIR/node_modules/.bin/tsx" "$RUNNER_DIR/src/run_dag.ts" \
+"$RUNNER_DIR/node_modules/.bin/tsx" "$RUNNER_DIR/run_dag.ts" \
   --dag /tmp/dag-<slug>.json \
   --canvas-path "$CANVAS_PATH"
 ```
@@ -151,9 +151,9 @@ After the runner exits, briefly summarize what completed/failed and re-link the 
 |------------|--------------------|
 | HIGH       | `gpt-5.3-codex`   |
 | MED        | `composer-2`       |
-| LOW        | `composer-2-fast`  |
+| LOW        | `auto-low`         |
 
-Override any subset inline with top-level DAG `models`, or pass a reusable profile with `--models-file <path>`. Precedence is defaults < DAG `models` < `--models-file`.
+Override any subset inline with top-level DAG `models`, or pass a reusable profile with `--models-file <path>`. Precedence is defaults < DAG `models` < `--models-file`. The Cursor SDK model catalog can vary by account; use `Cursor.models.list()` from the SDK docs to confirm available IDs.
 
 ## Auth
 
@@ -199,5 +199,5 @@ set -a && source .env && set +a
 ## Reference
 
 - DAG schema example: `examples/example_dag.json` (sibling of this skill after install)
-- Runner entry point: `scripts/run_dag.ts`
+- Runner entry point after install: `run_dag.ts` inside `$RUNNER_DIR`
 - Cursor SDK docs: https://cursor.com/docs/api/sdk/typescript

@@ -71,7 +71,7 @@ Watch [`dag-example.canvas.tsx`](./examples/example_dag.json) refresh as each ra
   "models": {
     "HIGH": "gpt-5.3-codex",
     "MED": "composer-2",
-    "LOW": "composer-2-fast"
+    "LOW": "auto-low"
   },
   "tasks": [
     {
@@ -102,15 +102,15 @@ By default, complexities map to:
 |------------|--------------------|
 | `HIGH`     | `gpt-5.3-codex`    |
 | `MED`      | `composer-2`       |
-| `LOW`      | `composer-2-fast`  |
+| `LOW`      | `auto-low`         |
 
 Override any subset inline in the DAG with a top-level `models` object, or keep reusable profiles in a JSON file:
 
 ```json
 {
   "HIGH": "gpt-5.3-codex",
-  "MED": "composer-2-fast",
-  "LOW": "composer-2-fast"
+  "MED": "composer-2",
+  "LOW": "auto-low"
 }
 ```
 
@@ -120,7 +120,7 @@ Then run with:
 pnpm dev -- --dag examples/example_dag.json --models-file ./models.fast.json --canvas-path "$PWD/.canvas/dag-example.canvas.tsx"
 ```
 
-Precedence is defaults < DAG `models` < `--models-file`.
+Precedence is defaults < DAG `models` < `--models-file`. The Cursor SDK model catalog can vary by account; the official SDK docs recommend `Cursor.models.list()` to confirm valid model IDs before overriding.
 
 ## CLI options
 
@@ -148,7 +148,7 @@ Install it as a personal skill (available across every workspace):
 ./scripts/install-skill.sh
 ```
 
-This copies `skill/SKILL.md`, `examples/`, and the runner sources into `~/.cursor/skills/dag-task-runner/`, then `pnpm install`s the runner's dependencies. To install at a custom location:
+This copies `skill/SKILL.md`, `examples/`, and the runner sources into `~/.cursor/skills/dag-task-runner/`, then `pnpm install`s the runner's dependencies. The installed entry point is `$DAG_RUNNER_DIR/run_dag.ts`. To install at a custom location:
 
 ```bash
 DEST=~/work/skills/dag-task-runner ./scripts/install-skill.sh

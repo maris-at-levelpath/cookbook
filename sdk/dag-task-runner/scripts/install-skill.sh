@@ -2,7 +2,7 @@
 # Install the DAG task runner as a personal Cursor skill at ~/.cursor/skills/dag-task-runner/.
 #
 # After install, the skill is available from any Cursor workspace and the agent
-# can invoke the runner from `${DAG_RUNNER_DIR}/src/run_dag.ts`.
+# can invoke the runner from `${DAG_RUNNER_DIR}/run_dag.ts`.
 #
 # Usage:
 #   ./scripts/install-skill.sh                # install / update at the default location
