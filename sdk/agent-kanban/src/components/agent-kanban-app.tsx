@@ -756,15 +756,29 @@ function AgentCardPreview({ agent }: { agent: AgentCard }) {
       ) : null}
       <CardFooter className="flex-wrap justify-between gap-2 border-t-0 bg-transparent text-xs text-muted-foreground">
         <span>{formatRelativeTime(agent.updatedAt ?? agent.createdAt)}</span>
-        {agent.prUrl ? (
-          <a
-            href={agent.prUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="text-foreground underline-offset-4 hover:underline"
-          >
-            PR
-          </a>
+        {agent.agentUrl || agent.prUrl ? (
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            {agent.agentUrl ? (
+              <a
+                href={agent.agentUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-foreground underline-offset-4 hover:underline"
+              >
+                Agent
+              </a>
+            ) : null}
+            {agent.prUrl ? (
+              <a
+                href={agent.prUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-foreground underline-offset-4 hover:underline"
+              >
+                PR
+              </a>
+            ) : null}
+          </div>
         ) : null}
       </CardFooter>
     </Card>

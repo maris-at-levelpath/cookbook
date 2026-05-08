@@ -609,6 +609,9 @@ function normalizeAgent(rawAgent: unknown): AgentCard {
     prUrl:
       firstString(record, ["prUrl", "pullRequestUrl"]) ??
       firstString(asRecord(record.pullRequest), ["url", "htmlUrl"]),
+    agentUrl:
+      firstString(record, ["url", "agentUrl"]) ??
+      `https://cursor.com/agents?id=${encodeURIComponent(id)}`,
     latestMessage:
       firstString(record, ["latestMessage", "lastMessage", "prompt", "description"]) ??
       firstString(asRecord(record.latestRun), ["summary", "statusText"]),

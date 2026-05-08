@@ -46,6 +46,7 @@ export type AgentCard = {
   createdAt?: string
   updatedAt?: string
   prUrl?: string
+  agentUrl?: string
   latestMessage?: string
   artifacts: ArtifactPreview[]
 }
